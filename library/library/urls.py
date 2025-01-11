@@ -33,4 +33,12 @@ urlpatterns = [
     path('orders/create/<int:book_id>/', views.create_order, name='create_order'),
     path('orders/close/<int:order_id>/', views.close_order, name='close_order'),
 
+    path('', views.orders_list, name='orders_list'),
+    path('my/', views.my_orders, name='my_orders'),
+    path('create/<int:book_id>/', views.create_order, name='create_order'),
+    path('close/<int:order_id>/', views.close_order, name='close_order'),
+    path('auth/', include('authentication.urls')),
+    path('', include('book.urls')),
+    path('books/', include('book.urls')),
+    path('orders/', include('order.urls')),
 ]

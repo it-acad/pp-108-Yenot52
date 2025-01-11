@@ -1,65 +1,59 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib import messages
-from django.http import HttpResponse
+from .models import CustomUser
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
-# Handle post-registration actions (redirect, etc.)
-# User Registration view
 def register(request):
     if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
         email = request.POST['email']
         password = request.POST['password']
-        role = request.POST.get('role', '0')  # Default to '0' (ordinary user)
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        role = int(request.POST['role'])
 
-        # Check if the email already exists
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already taken.')
-            return redirect('authentication:register')
+        if not email or not password:
+            return render(request, 'authentication/register.html', {'error': 'Email and password are required!'})
 
-        # Create new user
-        user = User.objects.create_user(username=email, first_name=first_name, last_name=last_name, email=email,
-                                        password=password)
-        user.save()
-
-        # Set the role, we will handle it later in your model's role management
-        # Here we assume a custom `CustomUser` model with a role attribute (but Django defaults can work as well)
-
-        # Redirect to login page after successful registration
-        messages.success(request, 'User registered successfully.')
-        return redirect('authentication:login')
+        user = CustomUser.objects.create(
+            email=email,
+            password=make_password(password),
+            first_name=first_name,
+            last_name=last_name,
+            role=role,
+            is_active=True
+        )
+        return redirect('login')
 
     return render(request, 'authentication/register.html')
 
-
-# Login view
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
 
-        # Authenticate the user
         user = authenticate(request, username=email, password=password)
-
-        if user is not None:
-            # Login the user
+        if user:
             login(request, user)
-            return redirect('home')  # Redirect to home or any other page after login
-        else:
-            messages.error(request, 'Invalid credentials.')
-            return redirect('authentication:login')
+            return redirect('books_list')
+        return render(request, 'authentication/login.html', {'error': 'Invalid email or password!'})
 
     return render(request, 'authentication/login.html')
 
-
-# Logout view
 def logout_view(request):
     logout(request)
-    return redirect('authentication:login')  # Redirect to login page after logout
+    return redirect('login')
 
+def is_librarian(user):
+    return user.role == 1  # Librarian role
+
+@user_passes_test(is_librarian)
+def user_list(request):
+    users = CustomUser.objects.all()
+    return render(request, 'authentication/user_list.html', {'users': users})
+
+@user_passes_test(is_librarian)
+def user_detail(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    return render(request, 'authentication/user_detail.html', {'user': user})

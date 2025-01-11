@@ -1,0 +1,6 @@
+<h1>User Details</h1>
+<p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Role: {{ user.get_role_name }}</p>
+<p>Status: {{ "Active" if user.is_active else "Inactive" }}</p>
+<a href="{% url 'user_list' %}">Back to Users</a>
