@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from . import include
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/', include('authentication.urls')),
+    path('authors/', include('author.urls')),
     path('', views.book_list, name='book_list'),
     path('<int:book_id>/', views.book_detail, name='book_detail'),
     path('filter/', views.book_filter, name='book_filter'),
@@ -28,5 +32,5 @@ urlpatterns = [
     path('orders/my/', views.my_orders, name='my_orders'),
     path('orders/create/<int:book_id>/', views.create_order, name='create_order'),
     path('orders/close/<int:order_id>/', views.close_order, name='close_order'),
-    
+
 ]

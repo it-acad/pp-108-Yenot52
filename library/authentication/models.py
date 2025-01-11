@@ -42,7 +42,6 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
 
-
 class CustomUser(AbstractBaseUser):
     """
         This class represents a basic user. \n
@@ -72,14 +71,20 @@ class CustomUser(AbstractBaseUser):
     middle_name = models.CharField(max_length=20, default=None)
     email = models.CharField(max_length=100, unique=True, default=None)
     password = models.CharField(default=None, max_length=255)
-    created_at = models.DateTimeField(editable=False, auto_now=datetime.datetime.now())
-    updated_at = models.DateTimeField(auto_now=datetime.datetime.now())
+    # created_at = models.DateTimeField(editable=False, auto_now=datetime.datetime.now())
+    # updated_at = models.DateTimeField(auto_now=datetime.datetime.now())
     role = models.IntegerField(choices=ROLE_CHOICES, default=0)
     is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)  # Required for admin access
+    is_superuser = models.BooleanField(default=False)  # Required for admin permissions
+    created_at = models.DateTimeField(auto_now_add=True) # Required
+    updated_at = models.DateTimeField(auto_now=True) # Required
     id = models.AutoField(primary_key=True)
 
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name'] # Required for admin access
     objects = CustomUserManager()
+
 
     def __str__(self):
         """
@@ -230,3 +235,4 @@ class CustomUser(AbstractBaseUser):
         returns str role name
         """
         return ROLE_CHOICES[self.role][1]
+
