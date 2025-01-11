@@ -1,4 +1,4 @@
-<h1>Список книг</h1>
+<h1>List of books</h1>
 <ul>
     {% for book in books %}
         <li><a href="{% url 'book_detail' book.id %}">{{ book.name }}</a> ({{ book.count }} шт.)</li>
