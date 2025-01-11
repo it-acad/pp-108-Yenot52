@@ -1,0 +1,10 @@
+<h1>{{ book.name }}</h1>
+<p>{{ book.description }}</p>
+<p>Кількість: {{ book.count }}</p>
+<p>Автори:
+    <ul>
+        {% for author in book.authors.all %}
+            <li>{{ author.name }}</li>
+        {% endfor %}
+    </ul>
+</p>

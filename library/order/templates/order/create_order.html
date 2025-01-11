@@ -1,0 +1,5 @@
+<h1>Create Order for {{ book.title }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm Order</button>
+</form>

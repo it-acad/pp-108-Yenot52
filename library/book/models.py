@@ -1,4 +1,5 @@
 from django.db import models
+from author.models import Author
 
 
 class Book(models.Model):
@@ -19,6 +20,7 @@ class Book(models.Model):
     description = models.CharField(blank=True, max_length=256)
     count = models.IntegerField(default=10)
     id = models.AutoField(primary_key=True)
+    authors = models.ManyToManyField(Author, related_name='books')
 
     def __str__(self):
         """
