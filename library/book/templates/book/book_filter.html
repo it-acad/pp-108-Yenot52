@@ -1,0 +1,10 @@
+<h1>Book filtering</h1>
+<form method="get">
+    <input type="text" name="q" placeholder="Введіть назву книги..." value="{{ query }}">
+    <button type="submit">Пошук</button>
+</form>
+<ul>
+    {% for book in books %}
+        <li><a href="{% url 'book_detail' book.id %}">{{ book.name }}</a></li>
+    {% endfor %}
+</ul>

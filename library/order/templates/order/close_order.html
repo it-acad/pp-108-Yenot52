@@ -1,0 +1,5 @@
+<h1>Close Order {{ order.id }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Close Order</button>
+</form>
