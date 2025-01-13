@@ -1,6 +1,44 @@
-<h1>All Orders</h1>
-<ul>
-    {% for order in orders %}
-        <li>Order {{ order.id }} - {{ order.book.title }} by {{ order.user.username }}</li>
-    {% endfor %}
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order List</title>
+</head>
+<body>
+    <h1>List of Orders</h1>
+
+    {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Book</th>
+                    <th>User</th>
+                    <th>Created At</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.book.name }}</td>
+                        <td>{{ order.user.username }}</td>
+                        <td>{{ order.created_at }}</td>
+                        <td>
+                            {% if order.end_at %}
+                                Closed
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No orders available.</p>
+    {% endif %}
+</body>
+</html>

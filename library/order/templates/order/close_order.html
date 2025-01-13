@@ -1,5 +1,9 @@
-<h1>Close Order {{ order.id }}</h1>
-<form method="post">
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Close Order: {{ order.id }}</h2>
+  <form method="POST">
     {% csrf_token %}
-    <button type="submit">Close Order</button>
-</form>
+    <button type="submit">Mark as Returned</button>
+  </form>
+{% endblock %}

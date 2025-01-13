@@ -12,10 +12,10 @@ def book_detail(request, book_id):
 
 def book_filter(request):
     query = request.GET.get('q', '')
-    book = Book.objects.filter(name__icontains=query)
+    book = Book.objects.filter(title__icontains=query)  
     return render(request, 'book/book_filter.html', {'book': book, 'query': query})
 
 def book_by_user(request, user_id):
-    order = Order.objects.filter(user_id=user_id).select_related('book')
-    book = [order.book for order in order]
-    return render(request, 'book/book_by_user.html', {'book': book})
+    orders = Order.objects.filter(user_id=user_id).select_related('book') 
+    books = [order.book for order in orders]  
+    return render(request, 'book/book_by_user.html', {'books': books})  

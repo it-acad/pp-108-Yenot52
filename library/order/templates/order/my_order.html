@@ -1,6 +1,18 @@
-<h1>My Orders</h1>
-<ul>
+<!-- templates/order/my_order.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Your Orders</h2>
+  <ul>
     {% for order in orders %}
-        <li>{{ order.book.title }} (Order ID: {{ order.id }})</li>
+      <li>
+        Order ID: {{ order.id }} | Book: {{ order.book.name }} | Created at: {{ order.created_at }} | 
+        {% if order.end_at %}
+          Returned: {{ order.end_at }}
+        {% else %}
+          <a href="{% url 'order:close_order' order.id %}">Close Order</a>
+        {% endif %}
+      </li>
     {% endfor %}
-</ul>
+  </ul>
+{% endblock %}

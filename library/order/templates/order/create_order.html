@@ -1,5 +1,10 @@
-<h1>Create Order for {{ book.title }}</h1>
-<form method="post">
+
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Create Order for {{ book.name }}</h2>
+  <form method="POST">
     {% csrf_token %}
-    <button type="submit">Confirm Order</button>
-</form>
+    <button type="submit">Create Order</button>
+  </form>
+{% endblock %}
